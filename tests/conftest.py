@@ -1,7 +1,8 @@
 # -*- coding: utf-8 -*-
 import pytest
 import numpy as np
-from sklearn.datasets import fetch_20newsgroups, load_boston, load_iris
+import pandas as pd
+from sklearn.datasets import fetch_20newsgroups, load_iris
 from sklearn.utils import shuffle
 
 NEWSGROUPS_CATEGORIES = [
@@ -51,8 +52,13 @@ def newsgroups_train_binary_big():
 
 @pytest.fixture(scope="session")
 def boston_train(size=SIZE):
-    data = load_boston()
-    X, y = shuffle(data.data, data.target, random_state=13)
+
+    data_url = "http://lib.stat.cmu.edu/datasets/boston"
+    raw_df = pd.read_csv(data_url, sep="\s+", skiprows=22, header=None)
+    data = np.hstack([raw_df.values[::2, :], raw_df.values[1::2, :2]])
+    target = raw_df.values[1::2, 2]
+    
+    X, y = shuffle(data, target, random_state=13)
     X = X.astype(np.float64)
     return X[:size], y[:size], data.feature_names
 
