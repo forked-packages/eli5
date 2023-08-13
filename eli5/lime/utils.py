@@ -12,6 +12,11 @@ from sklearn.utils import shuffle as _shuffle
 from eli5.utils import vstack
 from eli5.sklearn.utils import sklearn_version
 
+def _estimator_has(attr):
+    def check(self):
+        return hasattr(self.estimator, attr)
+
+    return check
 
 def fit_proba(clf, X, y_proba, expand_factor=10, sample_weight=None,
               shuffle=True, random_state=None,

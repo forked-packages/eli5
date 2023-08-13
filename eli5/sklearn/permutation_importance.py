@@ -17,6 +17,12 @@ from sklearn.metrics import check_scoring
 from eli5.permutation_importance import get_score_importances
 from eli5.sklearn.utils import pandas_available
 
+def _estimator_has(attr):
+    def check(self):
+        return hasattr(self.estimator, attr)
+
+    return check
+
 if pandas_available:
     import pandas as pd
 
